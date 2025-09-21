@@ -54,14 +54,20 @@ const Skills = () => {
       { name: 'MongoDB', percentage: 80 },
       { name: 'PostgreSQL/MySQL', percentage: 75 },
       { name: 'Git/Github', percentage: 80 },
-      { name: 'Docker', percentage: 50 }
+      { name: 'Docker', percentage: 50 },
+      { name: 'AI Tools ', percentage: 95 },
+      { name: 'Prompt Engineering ', percentage: 95 },
+      { name: ' DevOps ', percentage: 95 },
+
+     
+     
     ]
   }
 
   return (
     <section id="skills" ref={skillRef} className="py-20 bg-gray-100">
       <div className="container mx-auto px-6">
-        <h2 className="text-3xl font-bold text-center mb-16 section-title" data-aos="fade-up">Technical Skills</h2>
+        <h2 className="text-3xl font-bold text-center mb-16 section-title" data-aos="fade-up">Technical Skills  With AI Empowerment</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div data-aos="fade-right">
