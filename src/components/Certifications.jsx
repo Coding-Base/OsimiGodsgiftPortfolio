@@ -1,5 +1,5 @@
 // src/components/Certifications.jsx
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useMemo } from 'react'
 
 export default function Certifications() {
   const certifications = [
@@ -29,40 +29,68 @@ export default function Certifications() {
     return () => window.removeEventListener('resize', calc)
   }, [])
 
-  const pages = Math.max(1, Math.ceil(certifications.length / itemsPerPage))
+  const pages = useMemo(() => Math.max(1, Math.ceil(certifications.length / itemsPerPage)), [certifications.length, itemsPerPage])
 
   useEffect(() => {
-    if (currentPage >= pages) setCurrentPage(0)
+    if (currentPage >= pages) {
+      setCurrentPage(0)
+    }
   }, [itemsPerPage, pages, currentPage])
 
-  useEffect(() => {
+  const { intervalDelay, transitionMs } = useMemo(() => {
+    if (itemsPerPage === 1) return { intervalDelay: 6000, transitionMs: 900 }
+    if (itemsPerPage === 2) return { intervalDelay: 4500, transitionMs: 700 }
+    return { intervalDelay: 3500, transitionMs: 600 }
+  }, [itemsPerPage])
+
+  const stopAuto = () => {
+    if (autoRef.current) {
+      clearInterval(autoRef.current)
+      autoRef.current = null
+    }
+  }
+
+  const startAuto = () => {
+    stopAuto()
     autoRef.current = setInterval(() => {
       setCurrentPage((p) => (p + 1) % pages)
-    }, 3000)
-    return () => clearInterval(autoRef.current)
-  }, [pages])
+    }, intervalDelay)
+  }
+
+  useEffect(() => {
+    // restart auto when pages or interval changes
+    startAuto()
+    return () => stopAuto()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pages, intervalDelay])
 
   const goTo = (i) => {
     setCurrentPage(i % pages)
+    // reset auto so user has time to view the selected slide
+    stopAuto()
+    autoRef.current = setTimeout(() => startAuto(), intervalDelay)
   }
 
   const prev = () => {
     setCurrentPage((p) => (p - 1 + pages) % pages)
+    stopAuto()
+    autoRef.current = setTimeout(() => startAuto(), intervalDelay)
   }
 
   const next = () => {
     setCurrentPage((p) => (p + 1) % pages)
+    stopAuto()
+    autoRef.current = setTimeout(() => startAuto(), intervalDelay)
   }
 
   const handleMouseEnter = () => {
-    clearInterval(autoRef.current)
+    stopAuto()
   }
 
   const handleMouseLeave = () => {
-    clearInterval(autoRef.current)
-    autoRef.current = setInterval(() => {
-      setCurrentPage((p) => (p + 1) % pages)
-    }, 3000)
+    // small debounce to avoid immediate restart
+    stopAuto()
+    autoRef.current = setTimeout(() => startAuto(), 300)
   }
 
   const itemWidthPercent = 100 / itemsPerPage
@@ -77,15 +105,18 @@ export default function Certifications() {
           className="relative"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
+          onTouchStart={handleMouseEnter}
+          onTouchEnd={handleMouseLeave}
           aria-roledescription="carousel"
         >
           <div className="overflow-hidden rounded-lg">
             <div
               ref={containerRef}
-              className="flex transition-transform duration-700 ease-in-out"
+              className="flex"
               style={{
                 width: `${(certifications.length * 100) / itemsPerPage}%`,
-                transform: `translateX(${translatePercent}%)`
+                transform: `translateX(${translatePercent}%)`,
+                transition: `transform ${transitionMs}ms ease-in-out`
               }}
             >
               {certifications.map((cert, idx) => (
