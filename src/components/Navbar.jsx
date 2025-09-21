@@ -15,7 +15,7 @@ const Navbar = () => {
   return (
     <nav className="fixed w-full bg-white shadow-md z-50">
       <div className="container mx-auto px-6 py-3 flex justify-between items-center">
-        <a href="#" className="text-xl font-bold text-indigo-600">Osimi.G</a>
+        <a href="#" className="text-xl font-bold text-indigo-600">Osimi Godsgift </a>
         <div className="hidden md:flex space-x-10">
           <button onClick={() => scrollToSection('home')} className="hover:text-indigo-600 transition">Home</button>
           <button onClick={() => scrollToSection('about')} className="hover:text-indigo-600 transition">About</button>
