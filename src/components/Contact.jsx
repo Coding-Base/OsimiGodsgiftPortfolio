@@ -52,7 +52,7 @@ const Contact = () => {
               <a href="https://www.linkedin.com/in/osimi-gbubemi-godsgift-94a86a275" className="w-10 h-10 rounded-full bg-white text-blue-600 flex items-center justify-center hover:bg-green-400 hover:text-white transition">
                 <i className="fab fa-linkedin-in"></i>
               </a>
-              <a href="https://wa.me/07049946769" className="w-10 h-10 rounded-full bg-white text-blue-600 flex items-center justify-center hover:bg-green-400 hover:text-white transition">
+              <a href="https://wa.me/+2347049946769" className="w-10 h-10 rounded-full bg-white text-blue-600 flex items-center justify-center hover:bg-green-400 hover:text-white transition">
                 <i className="fab fa-whatsapp"></i>
               </a>
             </div>
