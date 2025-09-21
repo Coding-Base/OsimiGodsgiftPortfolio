@@ -1,25 +1,8 @@
 // src/components/Navbar.jsx
-import React, { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 
-export default function Navbar() {
+const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const menuRef = useRef(null)
-
-  useEffect(() => {
-    const onKey = (e) => {
-      if (e.key === 'Escape') setIsMenuOpen(false)
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [])
-
-  useEffect(() => {
-    // prevent body scroll when menu is open
-    document.body.style.overflow = isMenuOpen ? 'hidden' : ''
-    return () => {
-      document.body.style.overflow = ''
-    }
-  }, [isMenuOpen])
 
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId)
@@ -30,123 +13,97 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="fixed w-full z-50">
-      <div className="bg-white/90 backdrop-blur-sm shadow-md">
-        <div className="container mx-auto px-6 py-3 flex justify-between items-center">
-          <a href="#home" onClick={(e) => { e.preventDefault(); scrollToSection('home') }} className="text-xl font-bold text-blue-500">Osimi Godsgift</a>
-
-          <div className="hidden md:flex space-x-10">
-            <button onClick={() => scrollToSection('home')} className="hover:text-blue-500 transition">Home</button>
-            <button onClick={() => scrollToSection('about')} className="hover:text-blue-500 transition">About</button>
-            <button onClick={() => scrollToSection('skills')} className="hover:text-blue-500 transition">Skills</button>
-            <button onClick={() => scrollToSection('projects')} className="hover:text-blue-500 transition">Projects</button>
-            <button onClick={() => scrollToSection('certifications')} className="hover:text-blue-500 transition">Certifications</button>
-            <button onClick={() => scrollToSection('contact')} className="hover:text-blue-500 transition">Contact</button>
-          </div>
-
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={() => setIsMenuOpen((v) => !v)}
-              aria-expanded={isMenuOpen}
-              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-              className="relative z-60 w-10 h-10 flex items-center justify-center text-blue-500 focus:outline-none"
+    <nav className="fixed w-full bg-white shadow-md z-50">
+      <div className="container mx-auto px-6 py-3 flex justify-between items-center">
+        <a href="#" className="text-xl font-bold text-indigo-600">Osimi.G</a>
+        <div className="hidden md:flex space-x-10">
+          <button onClick={() => scrollToSection('home')} className="hover:text-indigo-600 transition">Home</button>
+          <button onClick={() => scrollToSection('about')} className="hover:text-indigo-600 transition">About</button>
+          <button onClick={() => scrollToSection('skills')} className="hover:text-indigo-600 transition">Skills</button>
+          <button onClick={() => scrollToSection('projects')} className="hover:text-indigo-600 transition">Projects</button>
+          <button onClick={() => scrollToSection('certifications')} className="hover:text-indigo-600 transition">Certifications</button>
+          <button onClick={() => scrollToSection('contact')} className="hover:text-indigo-600 transition">Contact</button>
+        </div>
+        <div className="md:hidden">
+          <button 
+            onClick={() => setIsMenuOpen(!isMenuOpen)} 
+            className="text-indigo-600 focus:outline-none"
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? (
+              <i className="fas fa-times text-xl"></i>
+            ) : (
+              <i className="fas fa-bars text-xl"></i>
+            )}
+          </button>
+        </div>
+      </div>
+      
+      {/* Mobile Menu - Book-like Animation */}
+      <div className={`md:hidden fixed top-0 left-0 w-full h-full bg-white z-40 transition-transform duration-500 ease-in-out ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="container mx-auto px-6 pt-20 pb-10 h-full flex flex-col justify-center">
+          <div className="space-y-8 text-center">
+            <button 
+              onClick={() => scrollToSection('home')} 
+              className="block text-2xl font-semibold text-indigo-600 hover:text-amber-500 transition w-full py-4 border-b border-gray-200"
             >
-              <span className={`block w-6 h-0.5 bg-current transform transition duration-300 ${isMenuOpen ? 'translate-y-0 rotate-45' : '-translate-y-2'}`} />
-              <span className={`block w-6 h-0.5 bg-current mt-1 transform transition duration-300 ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`} />
-              <span className={`block w-6 h-0.5 bg-current transform transition duration-300 ${isMenuOpen ? 'translate-y-0 -rotate-45' : 'translate-y-2'}`} />
+              Home
+            </button>
+            <button 
+              onClick={() => scrollToSection('about')} 
+              className="block text-2xl font-semibold text-indigo-600 hover:text-amber-500 transition w-full py-4 border-b border-gray-200"
+            >
+              About
+            </button>
+            <button 
+              onClick={() => scrollToSection('skills')} 
+              className="block text-2xl font-semibold text-indigo-600 hover:text-amber-500 transition w-full py-4 border-b border-gray-200"
+            >
+              Skills
+            </button>
+            <button 
+              onClick={() => scrollToSection('projects')} 
+              className="block text-2xl font-semibold text-indigo-600 hover:text-amber-500 transition w-full py-4 border-b border-gray-200"
+            >
+              Projects
+            </button>
+            <button 
+              onClick={() => scrollToSection('certifications')} 
+              className="block text-2xl font-semibold text-indigo-600 hover:text-amber-500 transition w-full py-4 border-b border-gray-200"
+            >
+              Certifications
+            </button>
+            <button 
+              onClick={() => scrollToSection('contact')} 
+              className="block text-2xl font-semibold text-indigo-600 hover:text-amber-500 transition w-full py-4"
+            >
+              Contact
             </button>
           </div>
-        </div>
-      </div>
-
-      {/* MOBILE BOOK MENU */}
-      <div
-        ref={menuRef}
-        className={`fixed inset-0 pointer-events-none`}
-        aria-hidden={!isMenuOpen}
-      >
-        {/* backdrop */}
-        <div
-          className={`absolute inset-0 bg-black/40 transition-opacity duration-400 ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0'}`}
-          onClick={() => setIsMenuOpen(false)}
-        />
-
-        {/* book container provides perspective for 3D */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="relative w-full max-w-lg h-full md:h-auto flex items-center justify-center pointer-events-none" style={{ perspective: '1400px' }}>
-            {/* left panel */}
-            <div
-              className="fixed top-0 left-0 h-full w-1/2 md:w-1/2 overflow-hidden pointer-events-auto"
-              style={{
-                transformStyle: 'preserve-3d',
-                transformOrigin: 'right center',
-                transition: 'transform 760ms cubic-bezier(.2,.85,.32,1), opacity 420ms',
-                zIndex: 70
-              }}
-            >
-              <div
-                className={`h-full w-full bg-gradient-to-r from-white to-slate-50/90 shadow-lg border-r border-white/30 flex items-center justify-center ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}
-                style={{
-                  transform: isMenuOpen ? 'rotateY(0deg)' : 'rotateY(88deg)',
-                  borderTopRightRadius: '0',
-                  borderBottomRightRadius: '0'
-                }}
-              >
-                <nav className="px-6 py-10 w-full max-w-xs">
-                  <ul className="space-y-6 text-left">
-                    <li><button onClick={() => scrollToSection('home')} className="text-xl font-semibold text-slate-800 hover:text-blue-600">Home</button></li>
-                    <li><button onClick={() => scrollToSection('about')} className="text-xl font-semibold text-slate-800 hover:text-blue-600">About</button></li>
-                    <li><button onClick={() => scrollToSection('skills')} className="text-xl font-semibold text-slate-800 hover:text-blue-600">Skills</button></li>
-                  </ul>
-                </nav>
-              </div>
-            </div>
-
-            {/* right panel */}
-            <div
-              className="fixed top-0 right-0 h-full w-1/2 md:w-1/2 overflow-hidden pointer-events-auto"
-              style={{
-                transformStyle: 'preserve-3d',
-                transformOrigin: 'left center',
-                transition: 'transform 760ms cubic-bezier(.2,.85,.32,1), opacity 420ms',
-                zIndex: 70
-              }}
-            >
-              <div
-                className={`h-full w-full bg-gradient-to-l from-white to-slate-50/90 shadow-lg border-l border-white/30 flex items-center justify-center ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}
-                style={{
-                  transform: isMenuOpen ? 'rotateY(0deg)' : 'rotateY(-88deg)',
-                  borderTopLeftRadius: '0',
-                  borderBottomLeftRadius: '0'
-                }}
-              >
-                <nav className="px-6 py-10 w-full max-w-xs">
-                  <ul className="space-y-6 text-right">
-                    <li><button onClick={() => scrollToSection('projects')} className="text-xl font-semibold text-slate-800 hover:text-blue-600">Projects</button></li>
-                    <li><button onClick={() => scrollToSection('certifications')} className="text-xl font-semibold text-slate-800 hover:text-blue-600">Certifications</button></li>
-                    <li><button onClick={() => scrollToSection('contact')} className="text-xl font-semibold text-slate-800 hover:text-blue-600">Contact</button></li>
-                  </ul>
-                </nav>
-              </div>
-            </div>
-
-            {/* center hinge accent */}
-            <div
-              className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-px bg-slate-200/60 pointer-events-none"
-              style={{ zIndex: 75 }}
-            />
+          
+          <div className="mt-12 flex justify-center space-x-6">
+            <a href="https://www.facebook.com/share/1CPpfhUTcz/" className="text-indigo-600 hover:text-amber-500 transition">
+              <i className="fab fa-facebook-f text-2xl"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/osimi-gbubemi-godsgift-94a86a275" className="text-indigo-600 hover:text-amber-500 transition">
+              <i className="fab fa-linkedin-in text-2xl"></i>
+            </a>
+            <a href="https://wa.me/2347049946769" className="text-indigo-600 hover:text-amber-500 transition">
+              <i className="fab fa-whatsapp text-2xl"></i>
+            </a>
           </div>
         </div>
       </div>
-
-      <style>{`
-        /* ensure smooth 3d effect and hide backface */
-        .fixed [style*="rotateY"] { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-        /* small responsive tweaks */
-        @media (max-width: 640px) {
-          .fixed > .absolute { /* adjust panel widths on very small screens */ }
-        }
-      `}</style>
+      
+      {/* Backdrop */}
+      {isMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+          onClick={() => setIsMenuOpen(false)}
+        ></div>
+      )}
     </nav>
   )
 }
+
+export default Navbar
