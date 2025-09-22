@@ -1,4 +1,4 @@
-// src/components/Certifications.jsx
+
 // src/components/Certifications.jsx
 import React, { useEffect, useRef, useState, useMemo } from 'react'
 
@@ -12,11 +12,18 @@ export default function Certifications() {
     { name: 'Alison', icon: 'fas fa-certificate' }
   ]
 
-  const containerRef = useRef(null)
+  const wrapperRef = useRef(null)         // visible viewport for slides
+  const trackRef = useRef(null)           // the flex track that moves
   const autoRef = useRef(null)
+  const resumeTimeoutRef = useRef(null)
+
   const [itemsPerPage, setItemsPerPage] = useState(4)
   const [currentPage, setCurrentPage] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
+  const [dragOffset, setDragOffset] = useState(0)
+  const draggingRef = useRef(false)
+  const startXRef = useRef(0)
+  const wrapperWidthRef = useRef(0)
 
   useEffect(() => {
     const calc = () => {
@@ -25,6 +32,9 @@ export default function Certifications() {
       else if (w >= 768) setItemsPerPage(3)
       else if (w >= 640) setItemsPerPage(2)
       else setItemsPerPage(1)
+
+      // measure wrapper width
+      wrapperWidthRef.current = wrapperRef.current ? wrapperRef.current.getBoundingClientRect().width : window.innerWidth
     }
     calc()
     window.addEventListener('resize', calc)
@@ -40,10 +50,9 @@ export default function Certifications() {
   }, [itemsPerPage, pages, currentPage])
 
   const { intervalDelay, transitionMs } = useMemo(() => {
-    // Slower transitions for better mobile experience
-    if (itemsPerPage === 1) return { intervalDelay: 8000, transitionMs: 1200 }  // Increased from 6000/900
-    if (itemsPerPage === 2) return { intervalDelay: 6000, transitionMs: 1000 }  // Increased from 4500/700
-    return { intervalDelay: 5000, transitionMs: 800 }                           // Increased from 3500/600
+    if (itemsPerPage === 1) return { intervalDelay: 8000, transitionMs: 900 }
+    if (itemsPerPage === 2) return { intervalDelay: 6000, transitionMs: 700 }
+    return { intervalDelay: 5000, transitionMs: 600 }
   }, [itemsPerPage])
 
   const stopAuto = () => {
@@ -51,12 +60,15 @@ export default function Certifications() {
       clearInterval(autoRef.current)
       autoRef.current = null
     }
+    if (resumeTimeoutRef.current) {
+      clearTimeout(resumeTimeoutRef.current)
+      resumeTimeoutRef.current = null
+    }
   }
 
   const startAuto = () => {
-    if (isPaused) return
-    
     stopAuto()
+    if (isPaused) return
     autoRef.current = setInterval(() => {
       setCurrentPage((p) => (p + 1) % pages)
     }, intervalDelay)
@@ -68,52 +80,104 @@ export default function Certifications() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pages, intervalDelay, isPaused])
 
+  const pauseAutoTemporarily = (extraDelay = 0) => {
+    setIsPaused(true)
+    stopAuto()
+    if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current)
+    resumeTimeoutRef.current = setTimeout(() => {
+      setIsPaused(false)
+      startAuto()
+    }, intervalDelay + extraDelay)
+  }
+
   const goTo = (i) => {
     setCurrentPage(i % pages)
-    // Pause auto-rotation for a while after user interaction
-    setIsPaused(true)
-    setTimeout(() => {
-      setIsPaused(false)
-    }, intervalDelay * 2) // Pause for two intervals
+    pauseAutoTemporarily(0)
   }
 
   const prev = () => {
     setCurrentPage((p) => (p - 1 + pages) % pages)
-    setIsPaused(true)
-    setTimeout(() => {
-      setIsPaused(false)
-    }, intervalDelay * 2)
+    pauseAutoTemporarily(0)
   }
 
   const next = () => {
     setCurrentPage((p) => (p + 1) % pages)
-    setIsPaused(true)
-    setTimeout(() => {
-      setIsPaused(false)
-    }, intervalDelay * 2)
+    pauseAutoTemporarily(0)
   }
 
-  const handleMouseEnter = () => {
-    setIsPaused(true)
-  }
+  // Pointer / touch drag handlers
+  useEffect(() => {
+    const wrapper = wrapperRef.current
+    if (!wrapper) return
+    wrapperWidthRef.current = wrapper.getBoundingClientRect().width
 
-  const handleMouseLeave = () => {
-    setIsPaused(false)
-  }
+    const getClientX = (e) => (e.touches ? e.touches[0].clientX : e.clientX)
 
-  const handleTouchStart = () => {
-    setIsPaused(true)
-  }
+    const onPointerDown = (e) => {
+      draggingRef.current = true
+      startXRef.current = getClientX(e)
+      setDragOffset(0)
+      pauseAutoTemporarily(0)
+      // stop transition while dragging
+      if (trackRef.current) trackRef.current.style.transition = 'none'
+    }
 
-  const handleTouchEnd = () => {
-    // Resume after a delay when touch ends
-    setTimeout(() => {
-      setIsPaused(false)
-    }, intervalDelay)
-  }
+    const onPointerMove = (e) => {
+      if (!draggingRef.current) return
+      const x = getClientX(e)
+      const delta = x - startXRef.current
+      setDragOffset(delta)
+    }
+
+    const onPointerUp = () => {
+      if (!draggingRef.current) return
+      draggingRef.current = false
+      const threshold = Math.max(40, wrapperWidthRef.current * 0.12) // swipe threshold
+      const delta = dragOffset
+      // restore transition
+      if (trackRef.current) trackRef.current.style.transition = `transform ${transitionMs}ms ease-in-out`
+      if (delta > threshold) {
+        // move previous
+        setCurrentPage((p) => (p - 1 + pages) % pages)
+      } else if (delta < -threshold) {
+        // move next
+        setCurrentPage((p) => (p + 1) % pages)
+      } else {
+        // snap back, no page change
+        setCurrentPage((p) => p)
+      }
+      setDragOffset(0)
+      // resume auto after one interval
+      pauseAutoTemporarily(0)
+    }
+
+    // pointer events
+    wrapper.addEventListener('touchstart', onPointerDown, { passive: true })
+    wrapper.addEventListener('touchmove', onPointerMove, { passive: true })
+    wrapper.addEventListener('touchend', onPointerUp)
+    wrapper.addEventListener('mousedown', onPointerDown)
+    window.addEventListener('mousemove', onPointerMove)
+    window.addEventListener('mouseup', onPointerUp)
+
+    return () => {
+      wrapper.removeEventListener('touchstart', onPointerDown)
+      wrapper.removeEventListener('touchmove', onPointerMove)
+      wrapper.removeEventListener('touchend', onPointerUp)
+      wrapper.removeEventListener('mousedown', onPointerDown)
+      window.removeEventListener('mousemove', onPointerMove)
+      window.removeEventListener('mouseup', onPointerUp)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dragOffset, pages, transitionMs, intervalDelay])
+
+  // compute translation in px: base = -currentPage * wrapperWidth
+  const wrapperWidth = wrapperWidthRef.current || (typeof window !== 'undefined' ? window.innerWidth : 0)
+  const baseTranslate = -currentPage * wrapperWidth
+  const translatePx = baseTranslate + (dragOffset || 0)
+  const transitionStyle = draggingRef.current ? 'none' : `transform ${transitionMs}ms ease-in-out`
 
   const itemWidthPercent = 100 / itemsPerPage
-  const translatePercent = -(currentPage * 100)
+  const trackWidthPercent = (certifications.length * 100) / itemsPerPage
 
   return (
     <section id="certifications" className="py-20 bg-gradient-to-br from-gray-100 to-gray-200">
@@ -122,20 +186,19 @@ export default function Certifications() {
 
         <div
           className="relative"
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
           aria-roledescription="carousel"
         >
-          <div className="overflow-hidden rounded-lg mx-4">
+          <div
+            ref={wrapperRef}
+            className="overflow-hidden rounded-lg mx-4"
+          >
             <div
-              ref={containerRef}
+              ref={trackRef}
               className="flex"
               style={{
-                width: `${(certifications.length * 100) / itemsPerPage}%`,
-                transform: `translateX(${translatePercent}%)`,
-                transition: `transform ${transitionMs}ms ease-in-out`
+                width: `${trackWidthPercent}%`,
+                transform: `translateX(${translatePx}px)`,
+                transition: transitionStyle
               }}
             >
               {certifications.map((cert, idx) => (
@@ -160,7 +223,7 @@ export default function Certifications() {
               <button
                 onClick={prev}
                 aria-label="Previous"
-                className="absolute left-0 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-indigo-600 rounded-full p-3 shadow-md z-10"
+                className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-indigo-600 rounded-full p-2 shadow-md z-10"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -170,7 +233,7 @@ export default function Certifications() {
               <button
                 onClick={next}
                 aria-label="Next"
-                className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-indigo-600 rounded-full p-3 shadow-md z-10"
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-indigo-600 rounded-full p-2 shadow-md z-10"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -198,3 +261,5 @@ export default function Certifications() {
     </section>
   )
 }
+
+    
