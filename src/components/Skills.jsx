@@ -45,6 +45,7 @@ const Skills = () => {
     frontend: [
       { name: 'React', percentage: 80 },
       { name: 'JavaScript', percentage: 85 },
+      { name: 'TypeScript', percentage: 60 },
       { name: 'HTML/CSS', percentage: 95 },
       { name: 'Tailwind CSS', percentage: 80 },
       { name: 'Bootstrap', percentage: 80 }
