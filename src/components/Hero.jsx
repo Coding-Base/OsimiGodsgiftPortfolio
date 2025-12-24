@@ -1,5 +1,5 @@
 // src/components/Hero.jsx
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const images = [
   'https://media.licdn.com/dms/image/v2/D4E22AQH8W-ZnwJVVew/feedshare-shrink_1280/B4EZkld_CpKcAs-/0/1757270249270?e=1761177600&v=beta&t=OeuT4_XILmDB_zo1oB7SYY5jIDFEQCK9UExq-ck1R1A',
@@ -8,8 +8,7 @@ const images = [
 
 export default function Hero() {
   const [index, setIndex] = useState(0)
-  const intervalRef = useRef(null)
-  const containerRef = useRef(null)
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
 
   useEffect(() => {
     images.forEach(src => {
@@ -19,146 +18,170 @@ export default function Hero() {
   }, [])
 
   useEffect(() => {
-    if (intervalRef.current) clearInterval(intervalRef.current)
-    intervalRef.current = setInterval(() => {
+    const interval = setInterval(() => {
       setIndex(i => (i + 1) % images.length)
     }, 5000)
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current)
-    }
+    return () => clearInterval(interval)
   }, [])
 
+  const handleMouseMove = (e) => {
+    const { clientX, clientY } = e
+    const x = (clientX / window.innerWidth - 0.5) * 20
+    const y = (clientY / window.innerHeight - 0.5) * 20
+    setMousePosition({ x, y })
+  }
+
   return (
-    <section id="home" className="min-h-screen flex items-center pt-16 gradient-bg text-white">
-      <style>{`
-        .hero-photo-wrap { position: relative; width: 20rem; height: 20rem; max-width: 80%; }
-        @media (min-width: 768px) { .hero-photo-wrap { width: 20rem; height: 20rem; } }
-        .hero-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 9999px; transition: opacity 700ms ease-in-out; }
-        .ripple-layer { position: absolute; inset: 0; display:flex; align-items:center; justify-content:center; pointer-events:none; border-radius:9999px; overflow:hidden; }
+    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden animated-bg">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-accent-cyan/10 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent-emerald/10 rounded-full blur-3xl animate-pulse-slow animation-delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-1 bg-gradient-to-r from-transparent via-accent-cyan/20 to-transparent"></div>
+      </div>
 
-        .ripple {
-          position: absolute;
-          width: 22%;
-          height: 22%;
-          border-radius: 50%;
-          background: radial-gradient(circle at 30% 35%, rgba(255,255,255,0.18), rgba(255,255,255,0.06) 40%, rgba(255,255,255,0.02) 60%, transparent 70%);
-          transform: scale(0.6);
-          opacity: 20;
-          filter: blur(0px);
-          animation-name: rippleExpand;
-          animation-duration: 2200ms;
-          animation-iteration-count: infinite;
-          will-change: transform, opacity, filter;
-        }
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left Column - Text Content */}
+          <div className="text-left" data-aos="fade-right" data-aos-delay="200">
+            <div className="inline-flex items-center space-x-2 mb-6">
+              <div className="w-3 h-3 bg-accent-cyan rounded-full animate-pulse"></div>
+              <span className="text-accent-cyan font-mono text-sm">Full Stack Developer</span>
+            </div>
+            
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight">
+              Hello, I'm <span className="gradient-text">Osimi Godsgift</span>
+            </h1>
+            
+            <h2 className="text-2xl md:text-3xl mb-8 text-text-secondary font-light">
+              Crafting digital experiences with clean code and innovative solutions
+            </h2>
+            
+            <p className="text-lg mb-10 text-text-secondary max-w-2xl">
+              Passionate Full Stack Developer with 3+ years of experience creating dynamic web applications. 
+              Blending technical engineering knowledge with cutting-edge software development skills.
+            </p>
 
-        .ripple.r1 { left: 30%; top: 30%; animation-delay: 0ms; }
-        .ripple.r2 { left: 50%; top: 50%; animation-delay: 550ms; }
-        .ripple.r3 { left: 65%; top: 40%; animation-delay: 1100ms; }
-        .ripple.r4 { left: 40%; top: 60%; animation-delay: 1650ms; }
+            <div className="flex flex-wrap gap-4 mb-12">
+              <button 
+                onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+                className="group px-8 py-3 bg-gradient-to-r from-accent-cyan to-accent-emerald rounded-full font-semibold hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center space-x-2"
+              >
+                <span>View My Work</span>
+                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </button>
+              
+              <button 
+                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                className="px-8 py-3 border-2 border-accent-cyan/30 text-accent-cyan rounded-full font-semibold hover:bg-accent-cyan/10 hover:border-accent-cyan transition-all duration-300"
+              >
+                Contact Me
+              </button>
+            </div>
 
-        @keyframes rippleExpand {
-          0% { transform: scale(0.6); opacity: 10.55; filter: blur(0px); }
-          40% { transform: scale(1.05); opacity:10.28; filter: blur(20px); }
-          70% { transform: scale(1.7); opacity: 10.12; filter: blur(4px); }
-          100% { transform: scale(2.6); opacity: 10; filter: blur(6px); }
-        }
-
-        .water-sheen {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(120deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.02) 75%, rgba(255,255,255,0.04) 100%);
-          background-size: 300% 300%;
-          mix-blend-mode: overlay;
-          opacity: 0.9;
-          animation: sheenMove 6s linear infinite;
-          border-radius: 9999px;
-          pointer-events: none;
-        }
-
-        @keyframes sheenMove {
-          0% { background-position: 0% 50%; transform: translateY(0px) rotate(0deg); }
-          50% { background-position: 70% 50%; transform: translateY(-4px) rotate(1deg); }
-          100% { background-position: 0% 50%; transform: translateY(0px) rotate(0deg); }
-        }
-
-        .wave-noise {
-          position: absolute;
-          inset: 0;
-          background-image: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.04), transparent 10%), radial-gradient(circle at 80% 70%, rgba(255,255,255,0.03), transparent 10%);
-          opacity: 0.9;
-          mix-blend-mode: overlay;
-          filter: blur(2px) saturate(120%);
-          animation: noiseMove 9s linear infinite;
-          border-radius: 9999px;
-          pointer-events: none;
-        }
-
-        @keyframes noiseMove {
-          0% { transform: translateX(0px) translateY(0px) scale(1); }
-          50% { transform: translateX(-6px) translateY(-4px) scale(1.02); }
-          100% { transform: translateX(0px) translateY(0px) scale(1); }
-        }
-
-        .inner-glow {
-          position: absolute;
-          inset: 0;
-          box-shadow: inset 0 20px 60px rgba(0,0,0,0.22), inset 0 -10px 30px rgba(255,255,255,0.02);
-          border-radius: 9999px;
-          pointer-events: none;
-        }
-
-        .ripple-center-dot {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          background: rgba(255,255,255,0.65);
-          box-shadow: 0 0 12px rgba(255,255,255,0.12), 0 0 28px rgba(0,0,0,0.28);
-          opacity: 0.95;
-        }
-      `}</style>
-
-      <div className="container mx-auto px-6 flex flex-col md:flex-row items-center">
-        <div className="flex flex-col md:w-1/2 justify-center items-start py-12" data-aos="fade-right">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Hello, I'm <span className="text-green-400">Osimi Godsgift</span></h1>
-          <h2 className="text-2xl md:text-3xl mb-6">Full Stack Developer</h2>
-          <p className="text-lg mb-8">Crafting digital experiences with clean code and innovative solutions</p>
-          <div className="flex space-x-4">
-            <button onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })} className="px-6 py-3 bg-green-500 rounded-lg font-semibold hover:bg-green-600 transition">View My Work</button>
-            <button onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })} className="px-6 py-3 border-2 border-white rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition">Contact Me</button>
-          </div>
-          <div className="flex mt-10 space-x-4">
-            <a href="https://www.facebook.com/share/1CPpfhUTcz/" className="text-white hover:text-green-400 transition" aria-label="Facebook"><i className="fab fa-facebook-f text-2xl" /></a>
-            <a href="https://www.linkedin.com/in/osimi-gbubemi-godsgift-94a86a275" className="text-white hover:text-green-400 transition" aria-label="LinkedIn"><i className="fab fa-linkedin-in text-2xl" /></a>
-            <a href="https://wa.me/2347049946769" className="text-white hover:text-green-400 transition" aria-label="WhatsApp"><i className="fab fa-whatsapp text-2xl" /></a>
-          </div>
-        </div>
-
-        <div className="md:w-1/2 flex justify-center mt-10 md:mt-0" data-aos="fade-left">
-          <div ref={containerRef} className="hero-photo-wrap rounded-full border-4 border-white shadow-xl">
-            {images.map((src, i) => (
-              <img
-                key={i}
-                src={src}
-                alt={`Osimi photo ${i + 1}`}
-                className={`hero-photo ${index === i ? 'opacity-100' : 'opacity-0'}`}
-                aria-hidden={index !== i}
-                draggable={false}
-              />
-            ))}
-
-            <div className="ripple-layer" aria-hidden>
-              <div className="ripple r1" />
-              <div className="ripple r2" />
-              <div className="ripple r3" />
-              <div className="ripple r4" />
-              <div className="water-sheen" />
-              <div className="wave-noise" />
-              <div className="inner-glow" />
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="ripple-center-dot" />
+            {/* Social Links */}
+            <div className="flex items-center space-x-6">
+              <div className="flex space-x-4">
+                <a href="https://www.linkedin.com/in/osimi-gbubemi-godsgift-94a86a275" 
+                   className="w-12 h-12 rounded-full bg-dark-surface flex items-center justify-center hover:bg-accent-cyan hover:text-dark-primary transition-all duration-300 group"
+                   aria-label="LinkedIn">
+                  <i className="fab fa-linkedin-in text-xl group-hover:scale-110 transition-transform"></i>
+                </a>
+                <a href="https://github.com/yourusername"
+                   className="w-12 h-12 rounded-full bg-dark-surface flex items-center justify-center hover:bg-accent-cyan hover:text-dark-primary transition-all duration-300 group"
+                   aria-label="GitHub">
+                  <i className="fab fa-github text-xl group-hover:scale-110 transition-transform"></i>
+                </a>
+                <a href="https://wa.me/2347049946769"
+                   className="w-12 h-12 rounded-full bg-dark-surface flex items-center justify-center hover:bg-accent-cyan hover:text-dark-primary transition-all duration-300 group"
+                   aria-label="WhatsApp">
+                  <i className="fab fa-whatsapp text-xl group-hover:scale-110 transition-transform"></i>
+                </a>
+              </div>
+              <div className="h-8 w-px bg-dark-card"></div>
+              <div>
+                <p className="text-sm text-text-secondary">Based in Nigeria</p>
+                <p className="text-sm text-accent-cyan">Available for projects</p>
               </div>
             </div>
           </div>
+
+          {/* Right Column - Photo */}
+          <div 
+            className="flex justify-center lg:justify-end"
+            data-aos="fade-left"
+            data-aos-delay="400"
+            onMouseMove={handleMouseMove}
+          >
+            <div className="relative">
+              <div className="relative w-80 h-80 md:w-96 md:h-96 animate-float">
+                {/* Outer Glow */}
+                <div className="absolute inset-0 rounded-full animate-glow"></div>
+                
+                {/* Main Photo Container */}
+                <div 
+                  className="absolute inset-4 rounded-full overflow-hidden border-4 border-dark-card"
+                  style={{
+                    transform: `translate(${mousePosition.x}px, ${mousePosition.y}px)`,
+                    transition: 'transform 0.1s ease-out'
+                  }}
+                >
+                  {images.map((src, i) => (
+                    <img
+                      key={i}
+                      src={src}
+                      alt={`Osimi photo ${i + 1}`}
+                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+                        index === i ? 'opacity-100' : 'opacity-0'
+                      }`}
+                      draggable={false}
+                    />
+                  ))}
+                  
+                  {/* Overlay Gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-accent-cyan/20 to-accent-emerald/20 mix-blend-overlay"></div>
+                </div>
+
+                {/* Floating Elements */}
+                <div className="absolute -top-6 -right-6 w-16 h-16 rounded-full bg-accent-cyan/20 animate-pulse-slow"></div>
+                <div className="absolute -bottom-8 -left-8 w-24 h-24 rounded-full bg-accent-emerald/20 animate-pulse-slow animation-delay-500"></div>
+                
+                {/* Tech Badges */}
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-dark-surface px-4 py-2 rounded-full border border-accent-cyan/30 shadow-lg">
+                  <span className="text-sm font-mono text-accent-cyan">React.js</span>
+                </div>
+                <div className="absolute -bottom-4 left-1/4 bg-dark-surface px-4 py-2 rounded-full border border-accent-emerald/30 shadow-lg">
+                  <span className="text-sm font-mono text-accent-emerald">Node.js</span>
+                </div>
+                <div className="absolute -bottom-4 right-1/4 bg-dark-surface px-4 py-2 rounded-full border border-accent-indigo/30 shadow-lg">
+                  <span className="text-sm font-mono text-accent-indigo">Python</span>
+                </div>
+              </div>
+
+              {/* Experience Badge */}
+              <div className="absolute -bottom-4 right-0 bg-gradient-to-r from-accent-cyan to-accent-emerald text-dark-primary px-6 py-3 rounded-full shadow-xl">
+                <div className="text-center">
+                  <div className="text-2xl font-bold">3+</div>
+                  <div className="text-sm font-semibold">Years Experience</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+          <button 
+            onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
+            className="text-text-secondary hover:text-accent-cyan transition-colors"
+            aria-label="Scroll down"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+          </button>
         </div>
       </div>
     </section>
