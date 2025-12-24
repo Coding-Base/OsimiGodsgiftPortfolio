@@ -1,6 +1,7 @@
 // src/components/Hero.jsx
 import React, { useEffect, useState } from 'react'
 
+import mylogo from "./mylogo.jpg"
 const images = [
   'https://media.licdn.com/dms/image/v2/D4E22AQH8W-ZnwJVVew/feedshare-shrink_1280/B4EZkld_CpKcAs-/0/1757270249270?e=1761177600&v=beta&t=OeuT4_XILmDB_zo1oB7SYY5jIDFEQCK9UExq-ck1R1A',
   'https://media.licdn.com/dms/image/v2/D4E03AQGzl2zhG9VnYQ/profile-displayphoto-shrink_400_400/B4EZUiUqMmHcAg-/0/1740037597825?e=1761177600&v=beta&t=6PhE--8qZvSwtc-LgMe4GZlxrPYMqKMpXS_0V2fCwPc'
@@ -89,7 +90,7 @@ export default function Hero() {
                    aria-label="LinkedIn">
                   <i className="fab fa-linkedin-in text-xl group-hover:scale-110 transition-transform"></i>
                 </a>
-                <a href="https://github.com/yourusername"
+                <a href="https://github.com/Coding-Base/"
                    className="w-12 h-12 rounded-full bg-dark-surface flex items-center justify-center hover:bg-accent-cyan hover:text-dark-primary transition-all duration-300 group"
                    aria-label="GitHub">
                   <i className="fab fa-github text-xl group-hover:scale-110 transition-transform"></i>
@@ -131,7 +132,7 @@ export default function Hero() {
                   {images.map((src, i) => (
                     <img
                       key={i}
-                      src={src}
+                      src={mylogo}
                       alt={`Osimi photo ${i + 1}`}
                       className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
                         index === i ? 'opacity-100' : 'opacity-0'
@@ -153,7 +154,7 @@ export default function Hero() {
                   <span className="text-sm font-mono text-accent-cyan">React.js</span>
                 </div>
                 <div className="absolute -bottom-4 left-1/4 bg-dark-surface px-4 py-2 rounded-full border border-accent-emerald/30 shadow-lg">
-                  <span className="text-sm font-mono text-accent-emerald">Node.js</span>
+                  <span className="text-sm font-mono text-accent-emerald">Typescript.js</span>
                 </div>
                 <div className="absolute -bottom-4 right-1/4 bg-dark-surface px-4 py-2 rounded-full border border-accent-indigo/30 shadow-lg">
                   <span className="text-sm font-mono text-accent-indigo">Python</span>
