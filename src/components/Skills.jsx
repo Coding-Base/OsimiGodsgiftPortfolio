@@ -28,11 +28,14 @@ const Skills = () => {
     ]
   }
 
+  // Generate skill IDs for both categories
+  const generateSkillId = (category, index) => `${category}-${index}`
+
   // Animate percentage counters with faster animation
   const animateCounter = (skillId, targetPercentage) => {
     let current = 0
-    const increment = targetPercentage / 30 // Faster: 30 steps instead of 50
-    const duration = 800 // Faster: 800ms instead of 1500ms
+    const increment = targetPercentage / 25 // Even faster: 25 steps
+    const duration = 600 // Faster: 600ms
     
     const timer = setInterval(() => {
       current += increment
@@ -45,7 +48,7 @@ const Skills = () => {
         ...prev,
         [skillId]: Math.floor(current)
       }))
-    }, duration / 30)
+    }, duration / 25)
   }
 
   useEffect(() => {
@@ -57,31 +60,26 @@ const Skills = () => {
         if (entry.isIntersecting && !hasAnimated) {
           setHasAnimated(true)
           
-          // Start animations for all skills
-          const allSkills = [
-            ...skills.frontend.map((skill, idx) => ({ 
-              ...skill, 
-              category: 'frontend',
-              index: idx 
-            })),
-            ...skills.backend.map((skill, idx) => ({ 
-              ...skill, 
-              category: 'backend',
-              index: idx + skills.frontend.length
-            }))
-          ]
-          
-          allSkills.forEach((skill) => {
-            const skillId = `${skill.category}-${skill.index}`
+          // Start animations for frontend skills
+          skills.frontend.forEach((skill, index) => {
+            const skillId = generateSkillId('frontend', index)
             setTimeout(() => {
               animateCounter(skillId, skill.percentage)
-            }, skill.index * 50) // Faster stagger: 50ms instead of 100ms
+            }, index * 40) // Faster stagger
+          })
+          
+          // Start animations for backend skills
+          skills.backend.forEach((skill, index) => {
+            const skillId = generateSkillId('backend', index)
+            setTimeout(() => {
+              animateCounter(skillId, skill.percentage)
+            }, (index + skills.frontend.length) * 40) // Stagger after frontend
           })
         }
       })
     }, { 
-      threshold: 0.1, // Lower threshold for mobile
-      rootMargin: '0px 0px -100px 0px' // Better mobile detection
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
     })
     
     if (el) observer.observe(el)
@@ -92,39 +90,37 @@ const Skills = () => {
     }
   }, [hasAnimated])
 
-  // Trigger animation on mount for mobile (fallback)
+  // Fallback animation for mobile
   useEffect(() => {
-    if (window.innerWidth <= 768 && !hasAnimated) {
+    if (!hasAnimated) {
       const timeout = setTimeout(() => {
-        setHasAnimated(true)
-        
-        const allSkills = [
-          ...skills.frontend.map((skill, idx) => ({ 
-            ...skill, 
-            category: 'frontend',
-            index: idx 
-          })),
-          ...skills.backend.map((skill, idx) => ({ 
-            ...skill, 
-            category: 'backend',
-            index: idx + skills.frontend.length
-          }))
-        ]
-        
-        allSkills.forEach((skill) => {
-          const skillId = `${skill.category}-${skill.index}`
-          setTimeout(() => {
-            animateCounter(skillId, skill.percentage)
-          }, skill.index * 50)
-        })
-      }, 500)
+        if (!hasAnimated) {
+          setHasAnimated(true)
+          
+          // Start animations for frontend skills
+          skills.frontend.forEach((skill, index) => {
+            const skillId = generateSkillId('frontend', index)
+            setTimeout(() => {
+              animateCounter(skillId, skill.percentage)
+            }, index * 40)
+          })
+          
+          // Start animations for backend skills
+          skills.backend.forEach((skill, index) => {
+            const skillId = generateSkillId('backend', index)
+            setTimeout(() => {
+              animateCounter(skillId, skill.percentage)
+            }, (index + skills.frontend.length) * 40)
+          })
+        }
+      }, 800) // Slightly longer delay for mobile fallback
       
       return () => clearTimeout(timeout)
     }
   }, [hasAnimated])
 
   const SkillCard = ({ skill, index, category, isFrontend = true }) => {
-    const skillId = `${category}-${index}`
+    const skillId = generateSkillId(category, index)
     const animatedPercentage = animatedPercentages[skillId] || 0
     const isAnimated = animatedPercentage > 0
     
@@ -157,17 +153,17 @@ const Skills = () => {
               style={{ 
                 width: isAnimated ? `${animatedPercentage}%` : '0%',
                 background: `linear-gradient(90deg, ${skill.color}80, ${skill.color})`,
-                transitionDelay: `${index * 50}ms`
+                transitionDelay: `${index * 40}ms`
               }}
             />
           </div>
           
           {/* Animated dot that moves with progress */}
-          {isAnimated && (
+          {isAnimated && animatedPercentage > 0 && (
             <div className="absolute top-1/2 -translate-y-1/2 w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-white animate-pulse"
                  style={{ 
                    left: `calc(${animatedPercentage}% - 3px)`,
-                   animationDelay: `${index * 50}ms`
+                   animationDelay: `${index * 40}ms`
                  }}></div>
           )}
         </div>
