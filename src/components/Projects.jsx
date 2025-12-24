@@ -10,7 +10,7 @@ const Projects = () => {
       embedUrl: "https://gloveries-business-solution.onrender.com/",
       description: "A comprehensive tech solution business website offering various tech-inclined services. Developed a completely new website with enhanced design and functionality for the business CEO, Mr. Samuel Imafidon.",
       liveUrl: "https://gloveries-business-solution.onrender.com/",
-      technologies: ["React", "Tailwind CSS", "Node.js", "MongoDB"],
+      technologies: ["React", "Tailwind"],
       category: "web",
       featured: true
     },
@@ -19,7 +19,7 @@ const Projects = () => {
       embedUrl: "https://futocampusmedia.online/",
       description: "A full-stack social media information news website with both user-facing frontend and admin panel for content creation and monitoring user reactions. Developed for the CEO of FUTO Campus Media.",
       liveUrl: "https://futocampusmedia.online/",
-      technologies: ["Next.js", "TypeScript", "PostgreSQL", "Prisma"],
+      technologies: ["Python", "JavaScript", "PostgreSQL", "Django"],
       category: "web",
       featured: true
     },
@@ -36,7 +36,7 @@ const Projects = () => {
       title: "Buziness Pally",
       description: "A mobile application that helps shop owners record sales and maintain inventory to maximize profit and minimize loss, specifically designed for SMEs. Currently being used by business owners for accounting purposes.",
       isMobile: true,
-      technologies: ["React Native", "Firebase", "Redux", "Chart.js"],
+      technologies: ["React Native", "Asyc Storage", "Redux", "Chart.js"],
       category: "mobile",
       featured: false
     },
@@ -45,17 +45,17 @@ const Projects = () => {
       embedUrl: "https://christopher-fashion-house.onrender.com/",
       description: "A tailored website developed for a client in the tailoring business, showcasing their services and portfolio with an elegant and professional design.",
       liveUrl: "https://christopher-fashion-house.onrender.com/",
-      technologies: ["HTML/CSS", "JavaScript", "Bootstrap", "PHP"],
+      technologies: ["HTML/CSS", "JavaScript", "tailwind"],
       category: "web",
       featured: false
     },
     {
-      title: "E-commerce Dashboard",
-      description: "A comprehensive admin dashboard for managing e-commerce operations, inventory, and customer relationships with real-time analytics.",
-      technologies: ["React", "Chart.js", "Express", "MongoDB"],
+      title: "Excel Sheet Modifier ",
+      description: "A Python project that helps create an automatic correction across several files with a full automated process and then creates a new file with the updated data",
+      technologies: ["Python", "sheets", "Excel", "files"],
       category: "web",
       featured: false,
-      githubUrl: "https://github.com/yourusername/ecommerce-dashboard"
+      githubUrl: "https://github.com/Coding-Base"
     }
   ]
 
