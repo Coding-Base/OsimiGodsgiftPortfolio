@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from 'react'
 
 const Skills = () => {
   const skillRef = useRef(null)
-  const [animatedSkills, setAnimatedSkills] = useState([])
+  const [animatedPercentages, setAnimatedPercentages] = useState({})
+  const [isInView, setIsInView] = useState(false)
   
   const skills = {
     frontend: [
@@ -26,40 +27,50 @@ const Skills = () => {
     ]
   }
 
+  // Animate percentage counters
+  const animateCounter = (skillId, targetPercentage) => {
+    let current = 0
+    const increment = targetPercentage / 50 // Divide into 50 steps (2% per step)
+    const duration = 1500 // Total animation duration
+    
+    const timer = setInterval(() => {
+      current += increment
+      if (current >= targetPercentage) {
+        current = targetPercentage
+        clearInterval(timer)
+      }
+      
+      setAnimatedPercentages(prev => ({
+        ...prev,
+        [skillId]: Math.floor(current)
+      }))
+    }, duration / 50) // Update 50 times over the duration
+  }
+
   useEffect(() => {
     const el = skillRef.current
     if (!el) return
 
-    const setInitialWidths = () => {
-      const skillBars = el.querySelectorAll('.progress-bar')
-      skillBars.forEach(bar => {
-        bar.style.width = '0%'
-      })
-    }
-
-    const animateSkillBars = (entries, observer) => {
+    const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
+          setIsInView(true)
+          
+          // Start animations for all skills
           const allSkills = [...skills.frontend, ...skills.backend]
-          allSkills.forEach((skill, i) => {
+          allSkills.forEach((skill, index) => {
+            const skillId = `${skill.category || 'skill'}-${index}`
             setTimeout(() => {
-              setAnimatedSkills(prev => {
-                const newSkills = [...prev]
-                newSkills[i] = { ...skill, animated: true }
-                return newSkills
-              })
-            }, i * 100)
+              animateCounter(skillId, skill.percentage)
+            }, index * 100) // Stagger animations
           })
+          
           observer.unobserve(entry.target)
         }
       })
-    }
-
-    setInitialWidths()
-
-    const observer = new IntersectionObserver(animateSkillBars, { 
-      threshold: 0.3,
-      rootMargin: '-50px'
+    }, { 
+      threshold: 0.2,
+      rootMargin: '-50px 0px'
     })
     
     if (el) observer.observe(el)
@@ -70,8 +81,10 @@ const Skills = () => {
     }
   }, [])
 
-  const SkillCard = ({ skill, index, category }) => {
-    const isAnimated = animatedSkills[index]?.animated || false
+  const SkillCard = ({ skill, index, category, isFrontend = true }) => {
+    const skillId = `${category}-${index}`
+    const animatedPercentage = animatedPercentages[skillId] || 0
+    const isAnimated = animatedPercentage > 0
     
     return (
       <div className="group relative bg-dark-surface rounded-xl p-6 hover-card border border-dark-card transition-all duration-300 hover:border-accent-cyan/30">
@@ -83,36 +96,38 @@ const Skills = () => {
             </div>
             <div>
               <h4 className="font-semibold text-text-primary">{skill.name}</h4>
-              <p className="text-sm text-text-secondary">{category}</p>
+              <p className="text-sm text-text-secondary">{isFrontend ? 'Frontend' : 'Backend'}</p>
             </div>
           </div>
           <div className="text-right">
             <div className="text-2xl font-bold gradient-text">
-              {isAnimated ? `${skill.percentage}%` : '0%'}
+              {isAnimated ? `${animatedPercentage}%` : '0%'}
             </div>
           </div>
         </div>
 
         <div className="relative">
+          {/* Background bar */}
           <div className="h-2 w-full bg-dark-card rounded-full overflow-hidden">
+            {/* Progress bar with animation */}
             <div 
-              className="progress-bar h-full rounded-full transition-all duration-1000 ease-out"
+              className="h-full rounded-full transition-all duration-1000 ease-out"
               style={{ 
-                width: isAnimated ? `${skill.percentage}%` : '0%',
-                background: `linear-gradient(90deg, ${skill.color}80, ${skill.color})`
+                width: isInView ? `${skill.percentage}%` : '0%',
+                background: `linear-gradient(90deg, ${skill.color}80, ${skill.color})`,
+                transitionDelay: `${index * 100}ms`
               }}
             />
           </div>
           
-          {/* Animated dots on progress bar */}
-          <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 h-1 overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity">
-            <div className="absolute w-2 h-2 rounded-full bg-white animate-pulse"
+          {/* Animated dot that moves with progress */}
+          {isInView && (
+            <div className="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white animate-pulse"
                  style={{ 
-                   left: `${skill.percentage}%`,
-                   transform: 'translateX(-50%)',
-                   animationDelay: `${index * 0.1}s`
+                   left: `calc(${skill.percentage}% - 4px)`,
+                   animationDelay: `${index * 100}ms`
                  }}></div>
-          </div>
+          )}
         </div>
 
         {/* Skill level indicator */}
@@ -135,7 +150,7 @@ const Skills = () => {
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-16" data-aos="fade-up">
           <span className="text-accent-cyan font-mono text-sm tracking-widest">TECHNICAL EXPERTISE</span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6">
+          <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6 font-poppins">
             Skills & <span className="gradient-text">Technologies</span>
           </h2>
           <p className="text-lg text-text-secondary max-w-2xl mx-auto">
@@ -165,7 +180,7 @@ const Skills = () => {
                   <i className="fas fa-palette text-xl"></i>
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-text-primary">Frontend Development</h3>
+                  <h3 className="text-2xl font-bold text-text-primary font-poppins">Frontend Development</h3>
                   <p className="text-text-secondary">Creating beautiful, responsive interfaces</p>
                 </div>
               </div>
@@ -177,7 +192,8 @@ const Skills = () => {
                   key={index} 
                   skill={skill} 
                   index={index}
-                  category="Frontend"
+                  category="frontend"
+                  isFrontend={true}
                 />
               ))}
             </div>
@@ -191,7 +207,7 @@ const Skills = () => {
                   <i className="fas fa-server text-xl"></i>
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-text-primary">Backend & DevOps</h3>
+                  <h3 className="text-2xl font-bold text-text-primary font-poppins">Backend & DevOps</h3>
                   <p className="text-text-secondary">Building scalable, secure systems</p>
                 </div>
               </div>
@@ -202,30 +218,101 @@ const Skills = () => {
                 <SkillCard 
                   key={index} 
                   skill={skill} 
-                  index={index + skills.frontend.length}
-                  category="Backend"
+                  index={index}
+                  category="backend"
+                  isFrontend={false}
                 />
               ))}
             </div>
           </div>
         </div>
 
-        {/* Additional Skills */}
+        {/* Updated Additional Skills */}
         <div className="mt-16" data-aos="fade-up">
           <div className="bg-dark-surface rounded-2xl p-8 border border-dark-card">
-            <h3 className="text-xl font-bold text-text-primary mb-6 text-center">
+            <h3 className="text-xl font-bold text-text-primary mb-6 text-center font-poppins">
               Additional Skills & Tools
             </h3>
             <div className="flex flex-wrap justify-center gap-3">
-              {['Next.js', 'Express.js', 'REST APIs', 'GraphQL', 'AWS', 'Firebase', 'Jest', 'CI/CD', 'Figma', 'Adobe XD'].map((tool, index) => (
+              {
+                'REST APIs', 
+                'GraphQL', 
+                'AWS', 
+                'Render', 
+                'AWS CloudFront', 
+                'AWS S3',
+                'Redux',
+                'OAuth',
+                'Postman',
+                'VS Code'
+              ].map((tool, index) => (
                 <span 
                   key={index}
-                  className="px-4 py-2 bg-dark-card text-text-secondary rounded-full text-sm hover:bg-accent-cyan hover:text-dark-primary transition-all duration-300 cursor-default"
+                  className="px-4 py-2 bg-dark-card text-text-secondary rounded-full text-sm hover:bg-accent-cyan hover:text-dark-primary transition-all duration-300 cursor-default hover:scale-105"
+                  style={{ animationDelay: `${index * 50}ms` }}
                 >
                   {tool}
                 </span>
               ))}
             </div>
+            
+            {/* Infrastructure Services */}
+            <div className="mt-8 pt-6 border-t border-dark-card">
+              <h4 className="text-lg font-semibold text-text-primary mb-4 text-center font-poppins">
+                Infrastructure & Deployment
+              </h4>
+              <div className="flex flex-wrap justify-center gap-4">
+                {[
+                  { name: 'Render', icon: 'fas fa-server', color: '#46B3A9' },
+                  { name: 'AWS S3', icon: 'fas fa-cloud', color: '#FF9900' },
+                  { name: 'CloudFront', icon: 'fas fa-bolt', color: '#FF9900' },
+                  { name: 'Github', icon: 'fas fa-globe', color: '#00C7B7' },
+                  { name: 'Gitlab', icon: 'fas fa-rocket', color: '#000000' },
+                  { name: 'Godaddy Hosting', icon: 'fas fa-tint', color: '#0080FF' }
+                ].map((service, index) => (
+                  <div 
+                    key={index}
+                    className="flex items-center space-x-2 px-4 py-2 bg-dark-card rounded-lg hover:bg-dark-surface transition-colors"
+                  >
+                    <i className={`${service.icon} text-lg`} style={{ color: service.color }}></i>
+                    <span className="text-text-primary text-sm">{service.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Skills Summary */}
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6" data-aos="fade-up">
+          <div className="bg-gradient-to-br from-accent-cyan/10 to-transparent border border-accent-cyan/20 rounded-xl p-6">
+            <div className="flex items-center mb-4">
+              <div className="w-10 h-10 rounded-full bg-accent-cyan/20 flex items-center justify-center mr-3">
+                <i className="fas fa-code text-accent-cyan"></i>
+              </div>
+              <h4 className="font-semibold text-text-primary">Full Stack</h4>
+            </div>
+            <p className="text-sm text-text-secondary">End-to-end development from UI/UX to deployment</p>
+          </div>
+          
+          <div className="bg-gradient-to-br from-accent-emerald/10 to-transparent border border-accent-emerald/20 rounded-xl p-6">
+            <div className="flex items-center mb-4">
+              <div className="w-10 h-10 rounded-full bg-accent-emerald/20 flex items-center justify-center mr-3">
+                <i className="fas fa-robot text-accent-emerald"></i>
+              </div>
+              <h4 className="font-semibold text-text-primary">AI Integration</h4>
+            </div>
+            <p className="text-sm text-text-secondary">Leveraging AI tools for enhanced development workflows</p>
+          </div>
+          
+          <div className="bg-gradient-to-br from-purple-500/10 to-transparent border border-purple-500/20 rounded-xl p-6">
+            <div className="flex items-center mb-4">
+              <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center mr-3">
+                <i className="fas fa-cloud text-purple-400"></i>
+              </div>
+              <h4 className="font-semibold text-text-primary">Cloud Native</h4>
+            </div>
+            <p className="text-sm text-text-secondary">Modern cloud infrastructure and deployment expertise</p>
           </div>
         </div>
       </div>
