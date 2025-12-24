@@ -234,7 +234,7 @@ const Skills = () => {
               Additional Skills & Tools
             </h3>
             <div className="flex flex-wrap justify-center gap-3">
-              {
+              {[
                 'REST APIs', 
                 'GraphQL', 
                 'AWS', 
@@ -245,7 +245,7 @@ const Skills = () => {
                 'OAuth',
                 'Postman',
                 'VS Code'
-              }.map((tool, index) => (
+              ].map((tool, index) => (
                 <span 
                   key={index}
                   className="px-4 py-2 bg-dark-card text-text-secondary rounded-full text-sm hover:bg-accent-cyan hover:text-dark-primary transition-all duration-300 cursor-default hover:scale-105"
