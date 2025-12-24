@@ -1,3 +1,4 @@
+
 // src/components/Skills.jsx
 import { useEffect, useRef, useState } from 'react'
 
@@ -57,9 +58,13 @@ const Skills = () => {
           setIsInView(true)
           
           // Start animations for all skills
-          const allSkills = [...skills.frontend, ...skills.backend]
+          const allSkills = [
+            ...skills.frontend.map(skill => ({ ...skill, category: 'frontend' })),
+            ...skills.backend.map(skill => ({ ...skill, category: 'backend' }))
+          ]
+          
           allSkills.forEach((skill, index) => {
-            const skillId = `${skill.category || 'skill'}-${index}`
+            const skillId = `${skill.category}-${index}`
             setTimeout(() => {
               animateCounter(skillId, skill.percentage)
             }, index * 100) // Stagger animations
@@ -113,7 +118,7 @@ const Skills = () => {
             <div 
               className="h-full rounded-full transition-all duration-1000 ease-out"
               style={{ 
-                width: isInView ? `${skill.percentage}%` : '0%',
+                width: isAnimated ? `${animatedPercentage}%` : '0%',
                 background: `linear-gradient(90deg, ${skill.color}80, ${skill.color})`,
                 transitionDelay: `${index * 100}ms`
               }}
@@ -121,10 +126,10 @@ const Skills = () => {
           </div>
           
           {/* Animated dot that moves with progress */}
-          {isInView && (
+          {isAnimated && (
             <div className="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white animate-pulse"
                  style={{ 
-                   left: `calc(${skill.percentage}% - 4px)`,
+                   left: `calc(${animatedPercentage}% - 4px)`,
                    animationDelay: `${index * 100}ms`
                  }}></div>
           )}
