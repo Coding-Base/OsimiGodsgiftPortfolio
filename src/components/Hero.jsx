@@ -1,7 +1,7 @@
 // src/components/Hero.jsx
 import React, { useEffect, useState } from 'react'
 
-import mylogo from "./mylogo.jpg"
+import mylogo from "./IMG_0596.png"
 const images = [
   'https://media.licdn.com/dms/image/v2/D4E22AQH8W-ZnwJVVew/feedshare-shrink_1280/B4EZkld_CpKcAs-/0/1757270249270?e=1761177600&v=beta&t=OeuT4_XILmDB_zo1oB7SYY5jIDFEQCK9UExq-ck1R1A',
   'https://media.licdn.com/dms/image/v2/D4E03AQGzl2zhG9VnYQ/profile-displayphoto-shrink_400_400/B4EZUiUqMmHcAg-/0/1740037597825?e=1761177600&v=beta&t=6PhE--8qZvSwtc-LgMe4GZlxrPYMqKMpXS_0V2fCwPc'
