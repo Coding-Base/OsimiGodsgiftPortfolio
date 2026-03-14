@@ -6,6 +6,15 @@ const Projects = () => {
   
   const projects = [
     {
+      title: "LIGHT HUB ACADEMY FULLSTACK WEBSITE ",
+      embedUrl: "https://lighthubacademy.org/",
+      description:"A full stack rebust platform framed in the pattern of Coursera For the sales of online courses, CBT exams and practice for Waec, Jamb, Interviews etc ",
+      liveUrl: "https://lighthubacademy.org/",
+      technologies: ["Typescript","Redis", "Tailwind","Dokploy","Postgresql","Python","Django","Mailjs","Hostinger","AWS", "S3"],
+      category: "web",
+      featured: true
+    },
+    {
       title: "Gloveries Business Solution",
       embedUrl: "https://gloveries-business-solution.onrender.com/",
       description: "A comprehensive tech solution business website offering various tech-inclined services. Developed a completely new website with enhanced design and functionality for the business CEO, Mr. Samuel Imafidon.",
