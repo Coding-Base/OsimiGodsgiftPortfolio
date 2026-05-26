@@ -27,7 +27,7 @@ const Projects = () => {
     {
       title: "Xcape ",
       embedUrl: "https://xcape-kshk.onrender.com",
-      description:"A Reservoir Sinulation Analysis Software that those History Matching, forecasting and can carry out sensitivity analysis on gas lift wells. This is an highly Python bases Physics Nodal Engine.",
+      description:"A Reservoir Simulation Analysis Software that does History Matching, forecasting and can carry out sensitivity analysis on gas lift wells. This is an highly Python base Physics Nodal Engine.",
       liveUrl: "https://xcape-kshk.onrender.com/",
       technologies: ["Typescript", "Tailwind","Python","Django","Matplotlib","Numpy","Pandas"],
       category: "Software",
