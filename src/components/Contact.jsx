@@ -1,4 +1,5 @@
-// src/components/Contact.jsx
+
+ // src/components/Contact.jsx
 import React, { useRef, useState } from 'react'
 import emailjs from '@emailjs/browser'
 
@@ -52,62 +53,62 @@ export default function Contact() {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
+        <div className="grid lg:grid-cols-2 gap-12 w-full min-w-0">
           {/* Contact Information */}
-          <div data-aos="fade-right">
-            <div className="bg-dark-surface rounded-2xl p-8 border border-dark-card hover-card">
+          <div data-aos="fade-right" className="min-w-0">
+            <div className="bg-dark-surface rounded-2xl p-8 border border-dark-card hover-card w-full max-w-full min-w-0 overflow-hidden">
               <h3 className="text-2xl font-bold text-text-primary mb-8 font-poppins">Contact Information</h3>
               
-              <div className="space-y-6">
-                <div className="flex items-start p-4 rounded-xl hover:bg-dark-card transition-all duration-300">
+              <div className="space-y-6 min-w-0">
+                <div className="flex items-start p-4 rounded-xl hover:bg-dark-card transition-all duration-300 min-w-0">
                   <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-accent-cyan/20 to-accent-emerald/20 flex items-center justify-center mr-4 flex-shrink-0">
                     <i className="fas fa-map-marker-alt text-accent-cyan text-lg"></i>
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <h4 className="font-semibold text-text-primary mb-1 font-poppins">Location</h4>
-                    <p className="text-text-secondary">Sapele, Delta State, Nigeria</p>
-                    <p className="text-sm text-accent-emerald mt-1">Available for remote work worldwide</p>
+                    <p className="text-text-secondary break-words">Sapele, Delta State, Nigeria</p>
+                    <p className="text-sm text-accent-emerald mt-1 break-words">Available for remote work worldwide</p>
                   </div>
                 </div>
 
                 <a 
                   href="mailto:osimigbubemigodsgift@gmail.com"
-                  className="flex items-start p-4 rounded-xl hover:bg-dark-card transition-all duration-300 cursor-pointer"
+                  className="flex items-start p-4 rounded-xl hover:bg-dark-card transition-all duration-300 cursor-pointer min-w-0 w-full max-w-full group"
                 >
                   <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-purple-500/20 to-pink-500/20 flex items-center justify-center mr-4 flex-shrink-0">
                     <i className="fas fa-envelope text-purple-500 text-lg"></i>
                   </div>
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <h4 className="font-semibold text-text-primary mb-1 font-poppins">Email</h4>
-                    <p className="text-text-secondary">osimigbubemigodsgift@gmail.com</p>
-                    <p className="text-sm text-purple-400 mt-1">Click to email me directly</p>
+                    <p className="text-text-secondary break-all max-w-full">osimigbubemigodsgift@gmail.com</p>
+                    <p className="text-sm text-purple-400 mt-1 break-words">Click to email me directly</p>
                   </div>
-                  <i className="fas fa-arrow-right text-accent-cyan ml-auto opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                  <i className="fas fa-arrow-right text-accent-cyan ml-auto opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"></i>
                 </a>
 
                 <a 
                   href="tel:+2347049946769"
-                  className="flex items-start p-4 rounded-xl hover:bg-dark-card transition-all duration-300 cursor-pointer"
+                  className="flex items-start p-4 rounded-xl hover:bg-dark-card transition-all duration-300 cursor-pointer min-w-0 w-full max-w-full group"
                 >
                   <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-emerald-500/20 to-green-500/20 flex items-center justify-center mr-4 flex-shrink-0">
                     <i className="fas fa-phone text-emerald-500 text-lg"></i>
                   </div>
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <h4 className="font-semibold text-text-primary mb-1 font-poppins">Phone / WhatsApp</h4>
-                    <p className="text-text-secondary">+234 704 994 6769</p>
-                    <p className="text-sm text-emerald-400 mt-1">Call or WhatsApp me directly</p>
+                    <p className="text-text-secondary break-words">+234 704 994 6769</p>
+                    <p className="text-sm text-emerald-400 mt-1 break-words">Call or WhatsApp me directly</p>
                   </div>
-                  <i className="fas fa-arrow-right text-accent-cyan ml-auto opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                  <i className="fas fa-arrow-right text-accent-cyan ml-auto opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"></i>
                 </a>
 
-                <div className="flex items-start p-4 rounded-xl hover:bg-dark-card transition-all duration-300">
+                <div className="flex items-start p-4 rounded-xl hover:bg-dark-card transition-all duration-300 min-w-0">
                   <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-amber-500/20 to-orange-500/20 flex items-center justify-center mr-4 flex-shrink-0">
                     <i className="fas fa-clock text-amber-500 text-lg"></i>
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <h4 className="font-semibold text-text-primary mb-1 font-poppins">Availability</h4>
-                    <p className="text-text-secondary">Available for projects</p>
-                    <p className="text-sm text-amber-400 mt-1">Response time: Within 24 hours</p>
+                    <p className="text-text-secondary break-words">Available for projects</p>
+                    <p className="text-sm text-amber-400 mt-1 break-words">Response time: Within 24 hours</p>
                   </div>
                 </div>
               </div>
@@ -115,7 +116,7 @@ export default function Contact() {
               {/* Social Links */}
               <div className="mt-12 pt-8 border-t border-dark-card">
                 <h4 className="text-lg font-semibold text-text-primary mb-4 font-poppins">Connect with me</h4>
-                <div className="flex space-x-4">
+                <div className="flex flex-wrap gap-4">
                   <a href="https://www.linkedin.com/in/osimi-gbubemi-godsgift-94a86a275" 
                      className="w-12 h-12 rounded-full bg-dark-card flex items-center justify-center text-accent-cyan hover:bg-accent-cyan hover:text-dark-primary transition-colors group"
                      aria-label="LinkedIn">
@@ -141,20 +142,20 @@ export default function Contact() {
             </div>
 
             {/* Availability Status */}
-            <div className="mt-6 bg-gradient-to-r from-accent-cyan/10 to-accent-emerald/10 border border-accent-cyan/20 rounded-2xl p-6">
-              <div className="flex items-center">
-                <div className="w-3 h-3 rounded-full bg-accent-emerald animate-pulse mr-3"></div>
-                <div>
-                  <p className="font-semibold text-text-primary font-poppins">Currently available for new projects</p>
-                  <p className="text-sm text-text-secondary mt-1">I'm taking on freelance work and full-time opportunities</p>
+            <div className="mt-6 bg-gradient-to-r from-accent-cyan/10 to-accent-emerald/10 border border-accent-cyan/20 rounded-2xl p-6 w-full max-w-full min-w-0 overflow-hidden">
+              <div className="flex items-center min-w-0">
+                <div className="w-3 h-3 rounded-full bg-accent-emerald animate-pulse mr-3 flex-shrink-0"></div>
+                <div className="min-w-0">
+                  <p className="font-semibold text-text-primary font-poppins break-words">Currently available for new projects</p>
+                  <p className="text-sm text-text-secondary mt-1 break-words">I'm taking on freelance work and full-time opportunities</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Contact Form */}
-          <div data-aos="fade-left">
-            <div className="bg-dark-surface rounded-2xl p-8 border border-dark-card hover-card">
+          <div data-aos="fade-left" className="min-w-0">
+            <div className="bg-dark-surface rounded-2xl p-8 border border-dark-card hover-card w-full max-w-full min-w-0 overflow-hidden">
               <h3 className="text-2xl font-bold text-text-primary mb-8 font-poppins">Send a Message</h3>
               
               {status && status.type === 'success' ? (
@@ -163,7 +164,7 @@ export default function Contact() {
                     <i className="fas fa-check text-2xl text-dark-primary"></i>
                   </div>
                   <h4 className="text-2xl font-bold text-text-primary mb-2 font-poppins">Message Sent Successfully!</h4>
-                  <p className="text-text-secondary mb-6">{status.message}</p>
+                  <p className="text-text-secondary mb-6 break-words">{status.message}</p>
                   <button
                     onClick={() => setStatus(null)}
                     className="px-6 py-2 border border-accent-cyan text-accent-cyan rounded-lg hover:bg-accent-cyan hover:text-dark-primary transition-colors"
@@ -172,18 +173,18 @@ export default function Contact() {
                   </button>
                 </div>
               ) : (
-                <form ref={form} onSubmit={sendEmail} className="space-y-6">
+                <form ref={form} onSubmit={sendEmail} className="space-y-6 min-w-0">
                   {status && status.type === 'error' && (
                     <div className="mb-4 px-4 py-3 rounded-lg bg-gradient-to-r from-red-500/10 to-red-600/10 border border-red-500/20 text-red-300">
-                      <div className="flex items-center">
-                        <i className="fas fa-exclamation-circle mr-3"></i>
-                        <span>{status.message}</span>
+                      <div className="flex items-center min-w-0">
+                        <i className="fas fa-exclamation-circle mr-3 flex-shrink-0"></i>
+                        <span className="break-words">{status.message}</span>
                       </div>
                     </div>
                   )}
 
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
+                  <div className="grid md:grid-cols-2 gap-6 min-w-0">
+                    <div className="min-w-0">
                       <label htmlFor="name" className="block text-sm font-medium text-text-secondary mb-2">
                         Your Name *
                       </label>
@@ -191,12 +192,12 @@ export default function Contact() {
                         type="text"
                         id="name"
                         name="user_name"
-                        className="w-full px-4 py-3 bg-dark-card border border-dark-card rounded-lg text-text-primary placeholder:text-text-secondary focus:outline-none focus:border-accent-cyan transition-colors"
+                        className="w-full max-w-full px-4 py-3 bg-dark-card border border-dark-card rounded-lg text-text-primary placeholder:text-text-secondary focus:outline-none focus:border-accent-cyan transition-colors min-w-0"
                         placeholder="John Doe"
                         required
                       />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <label htmlFor="email" className="block text-sm font-medium text-text-secondary mb-2">
                         Your Email *
                       </label>
@@ -204,14 +205,14 @@ export default function Contact() {
                         type="email"
                         id="email"
                         name="user_email"
-                        className="w-full px-4 py-3 bg-dark-card border border-dark-card rounded-lg text-text-primary placeholder:text-text-secondary focus:outline-none focus:border-accent-cyan transition-colors"
+                        className="w-full max-w-full px-4 py-3 bg-dark-card border border-dark-card rounded-lg text-text-primary placeholder:text-text-secondary focus:outline-none focus:border-accent-cyan transition-colors min-w-0"
                         placeholder="john@example.com"
                         required
                       />
                     </div>
                   </div>
 
-                  <div>
+                  <div className="min-w-0">
                     <label htmlFor="subject" className="block text-sm font-medium text-text-secondary mb-2">
                       Subject *
                     </label>
@@ -219,13 +220,13 @@ export default function Contact() {
                       type="text"
                       id="subject"
                       name="subject"
-                      className="w-full px-4 py-3 bg-dark-card border border-dark-card rounded-lg text-text-primary placeholder:text-text-secondary focus:outline-none focus:border-accent-cyan transition-colors"
+                      className="w-full max-w-full px-4 py-3 bg-dark-card border border-dark-card rounded-lg text-text-primary placeholder:text-text-secondary focus:outline-none focus:border-accent-cyan transition-colors min-w-0"
                       placeholder="Project Inquiry or Collaboration"
                       required
                     />
                   </div>
 
-                  <div>
+                  <div className="min-w-0">
                     <label htmlFor="message" className="block text-sm font-medium text-text-secondary mb-2">
                       Message *
                     </label>
@@ -233,7 +234,7 @@ export default function Contact() {
                       id="message"
                       name="message"
                       rows="6"
-                      className="w-full px-4 py-3 bg-dark-card border border-dark-card rounded-lg text-text-primary placeholder:text-text-secondary focus:outline-none focus:border-accent-cyan transition-colors resize-none"
+                      className="w-full max-w-full px-4 py-3 bg-dark-card border border-dark-card rounded-lg text-text-primary placeholder:text-text-secondary focus:outline-none focus:border-accent-cyan transition-colors resize-none min-w-0"
                       placeholder="Tell me about your project, timeline, and budget..."
                       required
                     />
@@ -260,7 +261,7 @@ export default function Contact() {
                     )}
                   </button>
 
-                  <p className="text-sm text-text-secondary text-center">
+                  <p className="text-sm text-text-secondary text-center break-words">
                     <i className="fas fa-shield-alt mr-2 text-accent-cyan"></i>
                     Your information is secure and will only be used to respond to your inquiry.
                   </p>
@@ -269,14 +270,14 @@ export default function Contact() {
             </div>
 
             {/* Additional Info */}
-            <div className="mt-6 grid grid-cols-2 gap-4">
-              <div className="bg-dark-card rounded-xl p-4 text-center hover:bg-dark-surface transition-colors">
+            <div className="mt-6 grid grid-cols-2 gap-4 min-w-0">
+              <div className="bg-dark-card rounded-xl p-4 text-center hover:bg-dark-surface transition-colors min-w-0 overflow-hidden">
                 <div className="text-2xl font-bold gradient-text mb-1 font-poppins">24h</div>
-                <div className="text-sm text-text-secondary">Response Time</div>
+                <div className="text-sm text-text-secondary break-words">Response Time</div>
               </div>
-              <div className="bg-dark-card rounded-xl p-4 text-center hover:bg-dark-surface transition-colors">
+              <div className="bg-dark-card rounded-xl p-4 text-center hover:bg-dark-surface transition-colors min-w-0 overflow-hidden">
                 <div className="text-2xl font-bold gradient-text mb-1 font-poppins">100%</div>
-                <div className="text-sm text-text-secondary">Client Satisfaction</div>
+                <div className="text-sm text-text-secondary break-words">Client Satisfaction</div>
               </div>
             </div>
           </div>
@@ -284,9 +285,9 @@ export default function Contact() {
 
         {/* Quick Contact CTA */}
         <div className="mt-16 text-center" data-aos="fade-up">
-          <div className="bg-dark-surface rounded-2xl p-8 border border-dark-card max-w-2xl mx-auto">
+          <div className="bg-dark-surface rounded-2xl p-8 border border-dark-card max-w-2xl mx-auto w-full max-w-full min-w-0 overflow-hidden">
             <h3 className="text-2xl font-bold text-text-primary mb-4 font-poppins">Prefer a quick chat?</h3>
-            <p className="text-text-secondary mb-6">Let's hop on a call to discuss your project requirements</p>
+            <p className="text-text-secondary mb-6 break-words">Let's hop on a call to discuss your project requirements</p>
             <a
               href="https://wa.me/+2347049946769?text=Hi%20Osimi,%20I%20found%20your%20portfolio%20and%20would%20like%20to%20discuss%20a%20project."
               target="_blank"
@@ -301,4 +302,4 @@ export default function Contact() {
       </div>
     </section>
   )
-}
+                             }
