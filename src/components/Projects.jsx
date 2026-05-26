@@ -5,6 +5,36 @@ const Projects = () => {
   const [activeFilter, setActiveFilter] = useState('all')
   
   const projects = [
+    
+{
+      title: "Ideyi Foundation  ",
+      embedUrl: "https://ideyifoundation.netlify.app/",
+      description:"The official Website of Ideyi foundation, a Non Governmental Organization",
+      liveUrl: "https://ideyifoundation.netlify.app/",
+      technologies: ["Typescript", "Tailwind"],
+      category: "web",
+      featured: true
+    },
+{
+      title: "DOJ CORE FIELD ENERGY ",
+      embedUrl: "https://dojcorefieldenergy.com",
+      description:"A Petroleum Company Official Website",
+      liveUrl: "https://dojcorefieldenergy.com/",
+      technologies: ["Typescript", "Tailwind"],
+      category: "web",
+      featured: true
+    },
+    {
+      title: "Xcape ",
+      embedUrl: "https://xcape-kshk.onrender.com",
+      description:"A Reservoir Sinulation Analysis Software that those History Matching, forecasting and can carry out sensitivity analysis on gas lift wells. This is an highly Python bases Physics Nodal Engine.",
+      liveUrl: "https://xcape-kshk.onrender.com/",
+      technologies: ["Typescript", "Tailwind","Python","Django","Matplotlib","Numpy","Pandas"],
+      category: "Software",
+      featured: true
+    },
+    
+    
     {
       title: "LIGHT HUB ACADEMY FULLSTACK WEBSITE ",
       embedUrl: "https://lighthubacademy.org/",
