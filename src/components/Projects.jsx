@@ -71,6 +71,16 @@ const Projects = () => {
       category: "web",
       featured: true
     },
+        
+{
+      title: "Verify",
+      embedUrl: "https://ideyifoundation.netlify.app/",
+      description:"A craftsmen and client marketplace for quality workmanship and artisan connect hub",
+      liveUrl: "https://verify-vrwq.onrender.com/",
+      technologies: ["Typescript", "Tailwind","Python",'Django"],
+      category: "web",
+      featured: true
+    },
     {
       title: "Buziness Pally",
       description: "A mobile application that helps shop owners record sales and maintain inventory to maximize profit and minimize loss, specifically designed for SMEs. Currently being used by business owners for accounting purposes.",
